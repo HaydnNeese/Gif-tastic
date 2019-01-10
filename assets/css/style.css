@@ -43,9 +43,9 @@ h2 {
 .button:hover {
     background-color: rgb(14, 11, 24, .5);
 }
-.gif-div {
+.gif-div-area {
     text-align: center;
-    margin: 20px 400px;
+    margin: 20px 100px;
 }
 img {
     padding: 5px;
@@ -76,4 +76,16 @@ img {
 }
 #submit-button:hover {
     background-color: rgb(255, 148, 133)
+}
+
+.gif-holder {
+    margin-top: 20px;
+}
+
+
+.gif-rating {
+    font-size: 20px;
+    color: black;
+    background-color: rgba(228, 253, 1, 0.2);
+    margin: 0px 500px;
 }

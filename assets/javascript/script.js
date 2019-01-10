@@ -9,7 +9,7 @@ var comediesArray = [
     "Brooklyn Nine-Nine",
     "Archer"
 ]
-
+console.log(comediesArray[0])
 var animated = false;
 
 //make buttons from the buttonArray
@@ -29,18 +29,79 @@ function makeButton() {
 };
 //run the makeButton function
 makeButton();
-//click submit button to add a favorite comedy to the list of buttons
+//click submit button to add a favorite comedy to the comedyArray
 $('#submit-button').on('click', function () {
     event.preventDefault();
-    $('.button-area').empty();
+    $('.button-div').empty();
     comediesArray.push($("#new-button-input").val());
     makeButton();
     $('#new-button-input').val('');
 });
 //when you click a gif button...create 10 paused gifs
 $(document).on('click', '.button', function () {
-    var buttonName = $(this).val("data-name")
-    var queryURL =
+    $('.gif-div-area').empty();
+    // console.log('button-clicked');
+    //set up the ajax method call
+    //make a variable for the name of the button clicked
+    var comedy = $(this).attr('data-name');
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+    comedy + "&api_key=dc6zaTOxFJmzC&limit=10";
+    // console.log(comedy);
 
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+    }).then(function(response) {
+        console.log(queryURL);
+        console.log(response);
+        //access the data array of the response
+        var results = response.data;
+        //create a for loop to display all 10 of the gifs in dynamically created divs
+        for(i=0; i < results.length; i++) {
+            var gifRating = $("<p>");
+            gifRating.addClass('gif-rating');
+            gifRating.text("Rating: " + results[i].rating);
+            var gifDiv = $('<div>');
+            gifDiv.addClass('gif');
+            var comedyImage = $('<img>');
+            comedyImage.attr('src', results[i].images.fixed_height_still.url);
+            comedyImage.attr('alt', comediesArray[i]);
+            comedyImage.attr('data-index', i)
+            comedyImage.attr('data-state', 'still');
+            comedyImage.addClass('gifImage');
+            var imgDiv = $('<div>');
+            imgDiv.addClass('gif-holder');
+            imgDiv.append(comedyImage);
+            gifDiv.append(imgDiv);
+            gifDiv.append(gifRating);
+            $('.gif-div-area').prepend(gifDiv);
+
+
+            
+    };
+        $(document).on('click', '.gifImage', function() {
+            console.log();
+            var state = $(this).attr("data-state");
+            var j = $(this).attr('data-index');
+            
+            if(state === 'still') {
+                $(this).attr('src', results[j].images.fixed_height.url);
+                $(this).attr('data-state', 'animated');
+            }
+            else {
+                $(this).attr('src', results[j].images.fixed_height_still.url);
+                $(this).attr('data-state', 'still');
+            }
+        });
+
+
+});
+
+  
+
+
+
+
+    //make a dynamic div to hold the gif
 
 })
