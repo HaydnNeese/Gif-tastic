@@ -56,7 +56,7 @@ $(document).on('click', '.button', function () {
         console.log(response);
         //access the data array of the response
         var results = response.data;
-        //create a for loop to display all 10 of the gifs in dynamically created divs
+        //create a for loop to display all 10 of the gifs in dynamically created divs that contain data attributes and classes
         for(i=0; i < results.length; i++) {
             var gifRating = $("<p>");
             gifRating.addClass('gif-rating');
@@ -64,7 +64,9 @@ $(document).on('click', '.button', function () {
             var gifDiv = $('<div>');
             gifDiv.addClass('gif');
             var comedyImage = $('<img>');
-            comedyImage.attr('src', results[i].images.fixed_height_still.url);
+            comedyImage.attr('src', results[i].images.fixed_height_still.url)
+            comedyImage.attr('data-source-still', results[i].images.fixed_height_still.url)
+            comedyImage.attr('data-source-animate', results[i].images.fixed_height.url)
             comedyImage.attr('alt', comediesArray[i]);
             comedyImage.attr('data-index', i)
             comedyImage.attr('data-state', 'still');
@@ -76,32 +78,26 @@ $(document).on('click', '.button', function () {
             gifDiv.append(gifRating);
             $('.gif-div-area').prepend(gifDiv);
 
+        } 
+            
+    });
 
-            
-    };
-        $(document).on('click', '.gifImage', function() {
-            console.log();
-            var state = $(this).attr("data-state");
-            var j = $(this).attr('data-index');
-            
-            if(state === 'still') {
-                $(this).attr('src', results[j].images.fixed_height.url);
-                $(this).attr('data-state', 'animated');
-            }
-            else {
-                $(this).attr('src', results[j].images.fixed_height_still.url);
-                $(this).attr('data-state', 'still');
-            }
-        });
+
 
 
 });
 
-  
-
-
-
-
-    //make a dynamic div to hold the gif
-
-})
+    //when user clicks on a still image it will play and then if clicked again it will stop
+        $(document).on('click', '.gifImage', function() {
+            var state = $(this).attr("data-state");
+            var j = $(this).attr('data-index');
+            
+            if(state === 'still') {
+                $(this).attr('src', $(this).attr('data-source-animate'));
+                $(this).attr('data-state', 'animated');
+            }
+            else {
+                $(this).attr('src',$(this).attr('data-source-still')) ;
+                $(this).attr('data-state', 'still');
+            }
+        });
